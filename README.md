@@ -54,7 +54,7 @@
 UI-тесты `ScreenTest` и `FullscreenMediaTest` прошли на эмуляторе (5 проверок). `LiveCatalogTest` прошёл отдельно с облачной базой и проверил каталог из 85 игр, обложку, трейлер, гайды, моды и навигацию.
 `LiveRegistrationTest` запускается только с аргументом `liveSignup=true`, поскольку создаёт реальный тестовый аккаунт в Supabase. Проверяет форму регистрации, загрузку каталога, профиль, повторный вход, сохранение сессии и избранное.
 
-`screenshots/catalog-live.png` и `screenshots/registered-profile.png` — снимки приложения с реальными данными Supabase.
+`screenshots/catalog-expanded.png` и `screenshots/supabase-85-games.png` — снимки приложения и результата проверки каталога в Supabase.
 
 ## Каталог и медиа
 
