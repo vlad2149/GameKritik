@@ -1,0 +1,10 @@
+# Android Studio and local SDK settings
+.gradle/
+.idea/
+.kotlin/
+local.properties
+**/build/
+*.iml
+*.log
+*.hprof
+.DS_Store
