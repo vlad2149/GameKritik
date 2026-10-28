@@ -88,5 +88,5 @@ UI-тесты `ScreenTest` и `FullscreenMediaTest` прошли на эмуля
 
 - [Макет GameKritik в Figma](https://www.figma.com/design/LQwdQHan4zajmZqupOnG1U/GameKritik-%D0%A1%D0%BF%D0%B8%D1%80%D0%B8%D0%B4%D0%BE%D0%BD%D0%BE%D0%B2)
 - [Проект Supabase](https://supabase.com/dashboard/project/bnceqynsvjcdiflbpilh/database/schemas) — административный интерфейс доступен владельцу проекта.
-- Исходники базы и миграции: каталог [`supabase`](supabase/).
-- Скриншоты приложения и базы: каталог [`screenshots`](screenshots/).
+- Исходники базы и миграции находятся в папке `supabase` внутри архива проекта.
+- Скриншоты приложения и базы находятся в папке `screenshots` внутри архива проекта.
