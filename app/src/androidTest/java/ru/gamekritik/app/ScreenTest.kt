@@ -40,10 +40,10 @@ class ScreenTest {
     }
 
     @Test fun shortReviewCannotBeSubmitted() {
-        rule.setContent { MaterialTheme { ReviewDialog(false,{}, { _, _ -> }) } }
-        rule.onNodeWithText("Опубликовать").assertIsNotEnabled()
+        rule.setContent { MaterialTheme { ReviewDialog(false, null, {}, { _, _ -> }) } }
+        rule.onNodeWithText("Сохранить").assertIsNotEnabled()
         rule.onNode(hasSetTextAction()).performTextInput("Хорошая игра с интересным сюжетом.")
-        rule.onNodeWithText("Опубликовать").assertIsEnabled()
+        rule.onNodeWithText("Сохранить").assertIsEnabled()
     }
 
     private fun snapshot(name: String) {

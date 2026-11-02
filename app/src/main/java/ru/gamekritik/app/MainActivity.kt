@@ -121,7 +121,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    if (reviewDialog && game != null) ReviewDialog(vm.busy, { reviewDialog = false }) { text, value -> vm.sendReview(game.id, text, value) { reviewDialog = false } }
+    if (reviewDialog && game != null) {
+        val previous = vm.myReviews.firstOrNull { it.gameId == game.id }
+        key(game.id, previous?.id) {
+            ReviewDialog(vm.busy, previous, { reviewDialog = false }) { text, value ->
+                vm.sendReview(game.id, text, value) { reviewDialog = false }
+            }
+        }
+    }
 }
 
 @Composable fun Brand(size: Int = 24) {
@@ -251,7 +258,7 @@ fun rating(value: Double) = String.format(Locale.US, "%.1f", value)
         when(section) {
             "Отзывы" -> {
                 item { Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Panel).padding(16.dp), verticalAlignment = Alignment.CenterVertically) { Column(Modifier.weight(1f)) { Text(game.rating?.let(::rating) ?: "—", fontSize = 38.sp, fontWeight = FontWeight.Bold); Text("${vm.reviews.size} отзывов", color = Muted, fontSize = 12.sp) }; Rating(game.rating) } }
-                item { RedButton("✎  Написать отзыв", !vm.busy, writeReview) }
+                item { RedButton(if (vm.myReviews.any { it.gameId == game.id }) "✎  Изменить свой отзыв" else "✎  Написать отзыв", !vm.busy, writeReview) }
                 item { Tabs(listOf("Все", "Положительные", "Отрицательные"), filter) { filter = it } }
                 val filtered = vm.reviews.filter { filter == 0 || (filter == 1 && it.rating >= 6) || (filter == 2 && it.rating < 6) }
                 items(filtered, key = { it.id }) { review -> Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Panel).padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -355,6 +362,7 @@ fun rating(value: Double) = String.format(Locale.US, "%.1f", value)
     }
 }
 @Composable fun ProfileScreen(vm: GameViewModel, login: () -> Unit, register: () -> Unit, openGame: (Int) -> Unit, openReview: (Int) -> Unit) {
+    var pendingDelete by remember { mutableStateOf<MyReview?>(null) }
     Column(Modifier.fillMaxSize()) {
         AppHeader("Профиль")
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -386,6 +394,10 @@ fun rating(value: Double) = String.format(Locale.US, "%.1f", value)
                             }
                             Text(review.text, color = Ink, maxLines = 4, overflow = TextOverflow.Ellipsis, fontSize = 13.sp)
                             Text(review.date, color = Muted, fontSize = 11.sp)
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                TextButton(onClick = { openReview(game.id) }) { Text("Изменить") }
+                                TextButton(onClick = { pendingDelete = review }) { Text("Удалить") }
+                            }
                         }
                     }
                 }
@@ -404,9 +416,18 @@ fun rating(value: Double) = String.format(Locale.US, "%.1f", value)
             }
         }
     }
+    pendingDelete?.let { review ->
+        AlertDialog(
+            onDismissRequest = { if (!vm.busy) pendingDelete = null },
+            title = { Text("Удалить отзыв?") },
+            text = { Text("Отзыв исчезнет из профиля и со страницы игры.") },
+            confirmButton = { TextButton(onClick = { vm.deleteReview(review.id, review.gameId) { pendingDelete = null } }, enabled = !vm.busy) { Text("Удалить") } },
+            dismissButton = { TextButton(onClick = { pendingDelete = null }, enabled = !vm.busy) { Text("Отмена") } }
+        )
+    }
 }
-@Composable fun ReviewDialog(busy: Boolean, close: () -> Unit, send: (String, Int) -> Unit) {
-    var text by rememberSaveable { mutableStateOf("") }; var value by rememberSaveable { mutableFloatStateOf(8f) }
-    AlertDialog(onDismissRequest = { if(!busy) close() }, title = { Text("Написать отзыв") }, text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) { Text("Ваша оценка: ${value.toInt()} / 10", color = Gold); Slider(value, { value = it }, valueRange = 1f..10f, steps = 8, enabled = !busy); OutlinedTextField(text, { if(it.length <= 5000) text = it }, Modifier.fillMaxWidth(), placeholder = { Text("Что вам понравилось в игре?") }, minLines = 4, maxLines = 8); Text("От 10 до 5000 символов", color = Muted, fontSize = 12.sp) } }, confirmButton = { TextButton({ send(text, value.toInt()) }, enabled = !busy && text.trim().length >= 10) { Text(if(busy) "Отправка…" else "Опубликовать") } }, dismissButton = { TextButton(close, enabled = !busy) { Text("Отмена") } }, containerColor = Panel)
+@Composable fun ReviewDialog(busy: Boolean, previous: MyReview?, close: () -> Unit, send: (String, Int) -> Unit) {
+    var text by rememberSaveable { mutableStateOf(previous?.text.orEmpty()) }; var value by rememberSaveable { mutableFloatStateOf(previous?.rating?.toFloat() ?: 8f) }
+    AlertDialog(onDismissRequest = { if(!busy) close() }, title = { Text(if (previous == null) "Написать отзыв" else "Изменить отзыв") }, text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) { Text("Ваша оценка: ${value.toInt()} / 10", color = Gold); Slider(value, { value = it }, valueRange = 1f..10f, steps = 8, enabled = !busy); OutlinedTextField(text, { if(it.length <= 5000) text = it }, Modifier.fillMaxWidth(), placeholder = { Text("Что вам понравилось в игре?") }, minLines = 4, maxLines = 8); Text("От 10 до 5000 символов", color = Muted, fontSize = 12.sp) } }, confirmButton = { TextButton({ send(text, value.toInt()) }, enabled = !busy && text.trim().length >= 10) { Text(if(busy) "Отправка…" else "Сохранить") } }, dismissButton = { TextButton(close, enabled = !busy) { Text("Отмена") } }, containerColor = Panel)
 }
 

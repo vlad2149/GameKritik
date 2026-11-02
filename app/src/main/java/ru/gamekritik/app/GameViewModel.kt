@@ -142,4 +142,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         myReviews = repository.myReviews()
         refresh(); done(); message = "Отзыв сохранён."
     }
+    fun deleteReview(reviewId: Int, gameId: Int, done: () -> Unit) = action {
+        repository.deleteReview(reviewId)
+        myReviews = repository.myReviews()
+        reviews = repository.reviews(gameId)
+        refresh(); done(); message = "Отзыв удалён."
+    }
 }

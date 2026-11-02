@@ -10,8 +10,8 @@ android {
         applicationId = "ru.gamekritik.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.5"
+        versionCode = 7
+        versionName = "1.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SUPABASE_URL", "\"https://bnceqynsvjcdiflbpilh.supabase.co\"")
         buildConfigField("String", "SUPABASE_KEY", "\"sb_publishable_O4YfJXJaxrzWcj2Hxyuk7Q_7c4KNUKp\"")

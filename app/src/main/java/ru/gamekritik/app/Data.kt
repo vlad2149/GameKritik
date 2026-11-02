@@ -123,6 +123,7 @@ class SupabaseRepository(private val store: SessionStore? = null) {
         MyReview(it.getInt("review_id"), it.getInt("game_id"), it.string("text"), it.getInt("rating"), it.string("date").take(10))
     }
     suspend fun review(gameId: Int, text: String, rating: Int) { rpc("gk_write_review", JSONObject().put("p_game_id", gameId).put("p_text", text.trim()).put("p_rating", rating)) }
+    suspend fun deleteReview(reviewId: Int) { rpc("gk_delete_review", JSONObject().put("p_review_id", reviewId)) }
     suspend fun steamReviews(game: Game): List<SteamReview> = withContext(Dispatchers.IO) {
         if (game.upcoming()) return@withContext emptyList()
         val appId = Regex("/app/(\\d+)").find(game.sourceUrl)?.groupValues?.get(1) ?: return@withContext emptyList()

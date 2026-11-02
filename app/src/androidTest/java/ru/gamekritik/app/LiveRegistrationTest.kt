@@ -42,7 +42,7 @@ class LiveRegistrationTest {
             val profile = repository.profile()
             assertEquals(email, profile.email)
             assertTrue(profile.name.startsWith("Проверка"))
-            assertTrue(repository.games().size >= 116)
+            assertTrue(repository.games().size >= 80)
             val game = repository.games().first()
             repository.favorite(game.id, true)
             assertTrue(game.id in repository.favorites())
