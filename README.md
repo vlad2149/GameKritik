@@ -90,3 +90,4 @@ UI-тесты `ScreenTest` и `FullscreenMediaTest` прошли на эмуля
 - [Проект Supabase](https://supabase.com/dashboard/project/bnceqynsvjcdiflbpilh/database/schemas) — административный интерфейс доступен владельцу проекта.
 - Исходники базы и миграции: каталог [`supabase`](supabase/) (также внутри архива проекта).
 - Скриншоты приложения и базы: каталог [`screenshots`](screenshots/) (также внутри архива проекта).
+- [Курсовая работа по образцу ChipMarket](docs/Курсовая_GameKritik_по_образцу_ChipMarket.docx) — редактируемый DOCX; [версия PDF](docs/Курсовая_GameKritik_по_образцу_ChipMarket.pdf) для просмотра.
