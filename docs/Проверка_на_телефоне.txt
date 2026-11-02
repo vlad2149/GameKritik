@@ -1,0 +1,8 @@
+
+ru.gamekritik.app.DefenseDemoTest:.
+
+Time: 39,228
+
+OK (1 test)
+
+
