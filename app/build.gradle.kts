@@ -13,8 +13,8 @@ android {
         versionCode = 7
         versionName = "1.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "SUPABASE_URL", "\"https://bnceqynsvjcdiflbpilh.supabase.co\"")
-        buildConfigField("String", "SUPABASE_KEY", "\"sb_publishable_O4YfJXJaxrzWcj2Hxyuk7Q_7c4KNUKp\"")
+        buildConfigField("String", "SUPABASE_URL", "\"${providers.gradleProperty("supabaseUrl").get()}\"")
+        buildConfigField("String", "SUPABASE_KEY", "\"${providers.gradleProperty("supabasePublishableKey").get()}\"")
     }
     buildFeatures { compose = true; buildConfig = true }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
